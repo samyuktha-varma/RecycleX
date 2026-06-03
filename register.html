@@ -17,15 +17,14 @@
     }
 
     .form-container {
-  background-color: #ffffff;
-  padding: 50px 40px;
-  border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(0, 128, 0, 0.25);
-  width: 550px; /* Significantly wider */
-  max-width: 90%; /* Makes it responsive */
-  text-align: center;
-}
-
+      background-color: #ffffff;
+      padding: 50px 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 128, 0, 0.25);
+      width: 550px; /* Significantly wider */
+      max-width: 90%; /* Makes it responsive */
+      text-align: center;
+    }
 
     h2 {
       color: #2e7d32;
@@ -33,25 +32,25 @@
     }
 
     form input {
-  width: 100%;
-  padding: 14px;
-  margin: 12px 0;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 1.1rem;
-}
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1.1rem;
+      box-sizing: border-box; /* Prevents input stretching over container boundaries */
+    }
 
-form button {
-  width: 100%;
-  padding: 14px;
-  background-color: #4caf50;
-  color: white;
-  font-size: 18px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
+    form button {
+      width: 100%;
+      padding: 14px;
+      background-color: #4caf50;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
 
     form button:hover {
       background-color: #388e3c;
@@ -76,7 +75,7 @@ form button {
       text-decoration: underline;
     }
   </style>
-<link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="form-container">
@@ -93,33 +92,39 @@ form button {
   </div>
 
   <script>
-    document.getElementById("register-form").addEventListener("submit", async function(e) {
+    document.getElementById("register-form").addEventListener("submit", function(e) {
       e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
       const message = document.getElementById("message");
 
-      try {
-        const res = await fetch("http://localhost:5000/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password })
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-          message.style.color = "green";
-          message.textContent = "Registration successful! You can now log in.";
-        } else {
-          message.style.color = "red";
-          message.textContent = data.error || "Registration failed.";
-        }
-      } catch (err) {
-        console.error("Registration error:", err);
+      if (!email || !password) {
         message.style.color = "red";
-        message.textContent = "Server error. Try again.";
+        message.textContent = "Please fill in all fields.";
+        return;
       }
+
+      // Read current accounts from local browser storage
+      let users = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+
+      // Verify if email profile is unique
+      if (users.some(u => u.email === email)) {
+        message.style.color = "red";
+        message.textContent = "Account already exists with this email.";
+        return;
+      }
+
+      // Store credentials locally inside browser memory
+      users.push({ email, password });
+      localStorage.setItem("registeredUsers", JSON.stringify(users));
+
+      message.style.color = "green";
+      message.textContent = "Registration successful! Redirecting to login...";
+      
+      // Automatic redirect sequence
+      setTimeout(() => { 
+        window.location.href = "login.html"; 
+      }, 1500);
     });
   </script>
 </body>
