@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard - Recycling Old Things</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('images/background.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      color: #2e7d32;
+    }
+
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .card-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .card {
+      width: 150px;
+      height: 150px;
+      background-color: #ffffffcc;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s, background-color 0.3s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      background-color: #e8f5e9;
+    }
+
+    .card img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .card-label {
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Welcome to Your Dashboard</h2>
+
+    <div class="dashboard-cards">
+
+      <div class="card-wrapper" onclick="window.location.href='smart-categorizer.html'">
+        <div class="card">
+          <img src="images/smart-categorizer.jpg" alt="Smart Waste Recognizer">
+        </div>
+        <div class="card-label">Smart Waste Recognizer</div>
+      </div>
+
+      <div class="card-wrapper" onclick="window.location.href='categories.html'">
+        <div class="card">
+          <img src="images/categories.jpg" alt="Recycling Centres">
+        </div>
+        <div class="card-label">Recycling Centres</div>
+      </div>
+
+      <div class="card-wrapper" onclick="window.location.href='reminders.html'">
+        <div class="card">
+          <img src="images/reminders.jpg" alt="Reminders & Notifications">
+        </div>
+        <div class="card-label">Reminders & Notifications</div>
+      </div>
+
+      <div class="card-wrapper" onclick="window.location.href='feedback.html'">
+        <div class="card">
+          <img src="images/feedback.jpg" alt="Feedback">
+        </div>
+        <div class="card-label">Feedback</div>
+      </div>
+
+      <div class="card-wrapper" onclick="window.location.href='rewards.html'">
+        <div class="card">
+          <img src="images/rewards.jpg" alt="Rewards">
+        </div>
+        <div class="card-label">Rewards</div>
+      </div>
+
+      <div class="card-wrapper" onclick="window.location.href='settings.html'">
+        <div class="card">
+          <img src="images/settings.jpg" alt="Settings & Help">
+        </div>
+        <div class="card-label">Settings & Help</div>
+      </div>
+
+      <div class="card-wrapper" onclick="window.location.href='index.html'">
+        <div class="card">
+          <img src="images/logout.jpg" alt="Log Out">
+        </div>
+        <div class="card-label">Log Out</div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

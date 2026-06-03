@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Recycling Old Things</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Select a Recycling Category</h2>
+        <div class="categories">
+            <div class="category">
+                <img src="images/paper.jpg" alt="Paper Recycling" onclick="goToRecyclingPage('paper')">
+                <p>Paper</p>
+            </div>
+            <div class="category">
+                <img src="images/plastic.jpg" alt="Plastic Recycling" onclick="goToRecyclingPage('plastic')">
+                <p>Plastic</p>
+            </div>
+            <div class="category">
+                <img src="images/glass.jpg" alt="Glass Recycling" onclick="goToRecyclingPage('glass')">
+                <p>Glass</p>
+            </div>
+            <div class="category">
+                <img src="images/bio medical waste.jpg" alt="Bio Medical Waste Recycling" onclick="goToRecyclingPage('bio medical waste')">
+                <p>Bio Medical Waste</p>
+            </div>
+            <div class="category">
+                <img src="images/metal.jpg" alt="Metal Recycling" onclick="goToRecyclingPage('metal')">
+                <p>Metal</p>
+            </div>
+ 	    <div class="category">
+                <img src="images/others.jpg" alt="Others Recycling" onclick="goToRecyclingPage('others')">
+                <p>Others</p>
+            </div>
+
+
+        </div>
+
+       <button onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+    </div>
+
+    <script>
+        function goToRecyclingPage(category) {
+            window.location.href = "map.html?category=" + category;
+        }
+
+           </script>
+</body>
+</html>

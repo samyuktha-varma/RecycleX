@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rewards</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 10px;
+    }
+
+    .points {
+      text-align: center;
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      color: #388e3c;
+    }
+
+    .rewards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .reward-card {
+      background: #f9fff9;
+      border: 1px solid #d6eadd;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      transition: transform 0.2s;
+      position: relative;
+    }
+
+    .reward-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .reward-card.dimmed {
+      opacity: 0.6; /* Light transparency */
+      pointer-events: none;
+    }
+
+    .reward-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .reward-title {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+      color: #2e7d32;
+    }
+
+    .reward-points {
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .redeem-btn {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #4caf50;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .redeem-btn:hover {
+      background-color: #388e3c;
+    }
+
+    .back-button {
+      display: block;
+      margin: 30px auto 0;
+      padding: 10px 20px;
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .back-button:hover {
+      background-color: #1565c0;
+    }
+  </style>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Your Recycling Rewards</h2>
+    <p class="points" id="pointsDisplay">You’ve earned <strong id="ecoPoints">150</strong> EcoPoints</p>
+
+    <div class="rewards-grid">
+      <div class="reward-card" data-cost="100">
+        <div class="reward-icon">🎒</div>
+        <div class="reward-title">Free Recycling Bag</div>
+        <div class="reward-points">100 points</div>
+        <button class="redeem-btn">Redeem</button>
+      </div>
+
+      <div class="reward-card" data-cost="200">
+        <div class="reward-icon">🌳</div>
+        <div class="reward-title">Tree in Your Name</div>
+        <div class="reward-points">200 points</div>
+        <button class="redeem-btn">Redeem</button>
+      </div>
+
+      <div class="reward-card" data-cost="250">
+        <div class="reward-icon">🚲</div>
+        <div class="reward-title">Eco-Friendly Bottle</div>
+        <div class="reward-points">250 points</div>
+        <button class="redeem-btn">Redeem</button>
+      </div>
+    </div>
+
+    <button class="back-button" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+  </div>
+
+  <script>
+    let userPoints = 150;
+    const ecoPointsDisplay = document.getElementById('ecoPoints');
+
+    function updateUI() {
+      ecoPointsDisplay.textContent = userPoints;
+
+      document.querySelectorAll('.reward-card').forEach(card => {
+        const cost = parseInt(card.getAttribute('data-cost'));
+        const button = card.querySelector('.redeem-btn');
+
+        if (userPoints >= cost && !card.classList.contains('redeemed')) {
+          card.classList.remove('dimmed');
+          button.disabled = false;
+        } else {
+          card.classList.add('dimmed');
+          button.disabled = true;
+        }
+      });
+    }
+
+    document.querySelectorAll('.redeem-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const card = button.closest('.reward-card');
+        const cost = parseInt(card.getAttribute('data-cost'));
+
+        if (userPoints >= cost && !card.classList.contains('redeemed')) {
+          userPoints -= cost;
+          card.classList.add('redeemed');
+          alert(`You redeemed: ${card.querySelector('.reward-title').textContent}`);
+          button.textContent = 'Redeemed';
+          button.disabled = true;
+          updateUI();
+        }
+      });
+    });
+
+    updateUI(); // Initial UI setup
+  </script>
+
+  <!-- You can add this only ONCE per page -->
+  <script src="language.js"></script>
+</body>
+</html>

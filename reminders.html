@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reminders</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .container {
+      padding: 30px;
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #f5f5f5;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    input[type="datetime-local"],
+    input[type="text"],
+    button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .reminder-list {
+      margin-top: 20px;
+      text-align: left;
+    }
+    .reminder-item {
+      background-color: #e0f7fa;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Set a Recycling Reminder</h2>
+
+    <!-- ✅ Added form wrapper -->
+    <form onsubmit="setReminder(); return false;">
+      <input type="text" id="reminderMsg" placeholder="Enter your reminder message" required />
+      <input type="datetime-local" id="reminderTime" required />
+      <button type="submit">Set Reminder</button>
+    </form>
+
+    <p id="reminderStatus"></p>
+
+    <h3>Past Reminders</h3>
+    <div id="reminderList" class="reminder-list"></div>
+
+    <button onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+  </div>
+
+  <script>
+    const loggedInUser = localStorage.getItem("loggedInUser");
+
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+
+    function notifyUser(message) {
+      if (Notification.permission === "granted") {
+        new Notification(message);
+      }
+    }
+
+    function formatLocalDateTime(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+
+    async function setReminder() {
+      const reminderTime = document.getElementById("reminderTime").value;
+      const reminderText = document.getElementById("reminderMsg").value.trim();
+      const status = document.getElementById("reminderStatus");
+
+      if (!reminderTime || !reminderText || !loggedInUser) {
+        status.textContent = "Please enter a message and select a valid date and time.";
+        return;
+      }
+
+      let reminderDate = new Date(reminderTime);
+      reminderDate.setSeconds(0);
+      reminderDate.setMilliseconds(0);
+
+      const now = new Date();
+      const delay = reminderDate.getTime() - now.getTime();
+
+      if (delay <= 0) {
+        status.textContent = "Time must be in the future.";
+        return;
+      }
+
+      const formattedTime = formatLocalDateTime(reminderDate);
+
+      try {
+        const res = await fetch("http://localhost:5000/reminders/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_email: loggedInUser,
+            reminder_text: reminderText,
+            reminder_time: formattedTime
+          })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          status.style.color = "green";
+          status.textContent = `Reminder set for ${reminderDate.toLocaleString()}`;
+
+          setTimeout(() => {
+            notifyUser(`♻️ Reminder: ${reminderText}`);
+          }, delay);
+
+          fetchReminders();
+        } else {
+          status.style.color = "red";
+          status.textContent = data.error || "Could not set reminder.";
+        }
+      } catch (err) {
+        console.error("Reminder error:", err);
+        status.style.color = "red";
+        status.textContent = "Server error. Try again.";
+      }
+    }
+
+    async function fetchReminders() {
+      const list = document.getElementById("reminderList");
+      if (!loggedInUser) return;
+
+      try {
+        const res = await fetch(`http://localhost:5000/reminders/${loggedInUser}`);
+        let reminders = await res.json();
+
+        reminders.sort((a, b) => new Date(b.time) - new Date(a.time));
+        reminders = reminders.slice(0, 5);
+
+        list.innerHTML = "";
+
+        const now = new Date();
+
+        reminders.forEach(r => {
+          const reminderTime = new Date(r.time);
+          list.innerHTML += `
+            <div class="reminder-item">
+              🗓️ ${reminderTime.toLocaleString()}<br>📌 ${r.text}
+            </div>
+          `;
+
+          const delay = reminderTime.getTime() - now.getTime();
+          if (delay > 0) {
+            setTimeout(() => {
+              notifyUser(`♻️ Reminder: ${r.text}`);
+            }, delay);
+          }
+        });
+
+        if (reminders.length === 0) {
+          list.innerHTML = "<p>No reminders found.</p>";
+        }
+
+      } catch (err) {
+        console.error("Fetch reminders error:", err);
+        list.innerHTML = "<p>Failed to load reminders.</p>";
+      }
+    }
+
+    window.onload = fetchReminders;
+  </script>
+</body>
+</html>

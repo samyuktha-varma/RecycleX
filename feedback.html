@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Feedback Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+      cursor: pointer;
+    }
+
+    .star {
+      font-size: 2rem;
+      color: #ccc;
+      transition: color 0.2s;
+    }
+
+    .star.selected,
+    .star.hovered {
+      color: #fbbf24;;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      margin-top: 10px;
+      cursor: pointer;
+      border: none;
+      background-color: #28a745;
+      color: white;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    #feedbackMessage {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+      color: green;
+    }
+
+    .back-button {
+      background-color:#218838;
+      margin-left: 10px;
+    }
+
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Feedback</h2>
+
+    <label>Rate your experience:</label>
+    <div class="stars" id="starRating">
+      <span class="star" data-value="1">&#9733;</span>
+      <span class="star" data-value="2">&#9733;</span>
+      <span class="star" data-value="3">&#9733;</span>
+      <span class="star" data-value="4">&#9733;</span>
+      <span class="star" data-value="5">&#9733;</span>
+    </div>
+
+    <p><strong>Do you have any suggestions?</strong></p>
+    <textarea id="feedback" placeholder="Your feedback here..."></textarea>
+    <button onclick="submitFeedback()">Submit</button>
+    <button class="back-button" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+    <p id="feedbackMessage"></p>
+  </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const stars = document.querySelectorAll('.star');
+    let selectedRating = 0;
+
+    stars.forEach((star, index) => {
+      star.addEventListener('click', () => {
+        selectedRating = parseInt(star.dataset.value);
+        updateStarDisplay();
+      });
+
+      star.addEventListener('mouseover', () => {
+        highlightStars(index);
+      });
+
+      star.addEventListener('mouseout', () => {
+        updateStarDisplay();
+      });
+    });
+
+    function highlightStars(index) {
+      stars.forEach((star, i) => {
+        star.classList.toggle('hovered', i <= index);
+      });
+    }
+
+    function updateStarDisplay() {
+      stars.forEach((star, i) => {
+        star.classList.toggle('selected', i < selectedRating);
+        star.classList.remove('hovered');
+      });
+    }
+
+    window.submitFeedback = function () {
+      const feedback = document.getElementById("feedback").value.trim();
+      const message = document.getElementById("feedbackMessage");
+
+      if (!selectedRating) {
+        message.textContent = "Please select a star rating.";
+        message.style.color = "red";
+        return;
+      }
+
+      if (!feedback) {
+        message.textContent = "Please write some feedback.";
+        message.style.color = "red";
+        return;
+      }
+
+      message.textContent = `Thank you! You rated us ${selectedRating} star(s) and said: "${feedback}"`;
+      message.style.color = "green";
+
+      // Optional: reset form
+      selectedRating = 0;
+      updateStarDisplay();
+      document.getElementById("feedback").value = "";
+    };
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register - Recycling Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #e8f5e9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+  background-color: #ffffff;
+  padding: 50px 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 128, 0, 0.25);
+  width: 550px; /* Significantly wider */
+  max-width: 90%; /* Makes it responsive */
+  text-align: center;
+}
+
+
+    h2 {
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+
+    form input {
+  width: 100%;
+  padding: 14px;
+  margin: 12px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1.1rem;
+}
+
+form button {
+  width: 100%;
+  padding: 14px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+
+    form button:hover {
+      background-color: #388e3c;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .link {
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+
+    .link a {
+      color: #1976d2;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="form-container">
+    <h2>Create Account</h2>
+    <form id="register-form">
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Register</button>
+    </form>
+    <p id="message"></p>
+    <div class="link">
+      Already have an account? <a href="login.html">Login</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("register-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const message = document.getElementById("message");
+
+      try {
+        const res = await fetch("http://localhost:5000/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          message.style.color = "green";
+          message.textContent = "Registration successful! You can now log in.";
+        } else {
+          message.style.color = "red";
+          message.textContent = data.error || "Registration failed.";
+        }
+      } catch (err) {
+        console.error("Registration error:", err);
+        message.style.color = "red";
+        message.textContent = "Server error. Try again.";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Waste Recognizer</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 500px;
+    }
+    input[type="text"],
+    input[type="file"] {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Smart Waste Recognizer</h2>
+    
+    <!-- Text-based recognition -->
+    <input type="text" id="itemName" placeholder="Type an item (e.g., bottle, food)" />
+    <button onclick="recognizeByName()">Recognize by Name</button>
+    
+    <p style="margin: 20px 0;">OR</p>
+
+    <!-- Camera Scanner (mobile-friendly) -->
+    <input type="file" accept="image/*" capture="environment" id="cameraInput" onchange="simulateImageRecognition()">
+    
+    <p id="result">Prediction will appear here</p>
+    <button onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+  </div>
+
+ <script>
+  async function recognizeByName() {
+    const nameInput = document.getElementById('itemName').value.trim();
+    const result = document.getElementById('result');
+
+    if (!nameInput) {
+      result.textContent = "Please type an item name.";
+      return;
+    }
+
+try {
+  const response = await fetch(`http://localhost:5000/items/check/${encodeURIComponent(nameInput)}`);
+  const data = await response.json();
+
+  console.log("Fetched data:", data); // ✅ Add this line
+
+  if (data.is_recyclable === true) {
+    result.innerHTML = "♻ <strong>Recyclable</strong>: Yes";
+  } else if (data.is_recyclable === false) {
+    result.innerHTML = "❌ <strong>Recyclable</strong>: No";
+  } else {
+    result.innerHTML = "⚠ <strong>Recyclability</strong>: Unknown item";
+  }
+}
+ catch (error) {
+      console.error("Error:", error);
+      result.innerHTML = "❌ Failed to check item. Is your server running?";
+    }
+  }
+</script>
+
+
+</body>
+</html>

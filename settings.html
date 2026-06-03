@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Settings & Help</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #f4f6f9;
+      color: #333;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #eee;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #2e7d32;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0;
+      font-size: 1rem;
+    }
+
+    select, input[type="datetime-local"] {
+      padding: 6px;
+      font-size: 1rem;
+      width: 100%;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 16px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background-color: #388e3c;
+    }
+
+    .secondary {
+      background-color: #1976d2;
+    }
+
+    .secondary:hover {
+      background-color: #1565c0;
+    }
+
+    .danger {
+      background-color: #d32f2f;
+    }
+
+    .danger:hover {
+      background-color: #b71c1c;
+    }
+
+    .help {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Settings</h2>
+
+    <label>
+      <input type="checkbox" id="notificationsToggle"> Enable Notifications
+    </label>
+
+    <label>
+      <input type="checkbox" id="darkModeToggle"> Dark Mode
+    </label>
+
+    <label for="language">Select Language:</label>
+    <select id="language">
+      <option>English</option>
+      <option>Hindi</option>
+      <option>Telugu</option>
+      <option>Tamil</option>
+      <option>Kannada</option>
+    </select>
+
+    <label for="reminder">Set Daily Reminder:</label>
+    <input type="datetime-local" id="reminder">
+
+    <div class="button-group">
+      <button onclick="saveSettings()">Save Settings</button>
+      <button class="danger" onclick="resetSettings()">Reset Settings</button>
+      <button class="secondary" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+    </div>
+
+    <div class="help">
+      <h2>Help</h2>
+      <p>For any issues, contact: <a href="mailto:support@recyclinghub.com">support@recyclinghub.com</a></p>
+    </div>
+  </div>
+
+  <script>
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const notificationsToggle = document.getElementById('notificationsToggle');
+
+    // Dark Mode Toggle
+    darkModeToggle.addEventListener('change', () => {
+      document.body.classList.toggle('dark-mode', darkModeToggle.checked);
+    });
+
+    function saveSettings() {
+      const reminderTime = document.getElementById('reminder').value;
+      const language = document.getElementById('language').value;
+      alert("Settings Saved:\n" +
+            "Notifications: " + (notificationsToggle.checked ? "On" : "Off") + "\n" +
+            "Dark Mode: " + (darkModeToggle.checked ? "Enabled" : "Disabled") + "\n" +
+            "Language: " + language + "\n" +
+            (reminderTime ? "Reminder Set for: " + reminderTime : "No Reminder Set"));
+    }
+
+    function resetSettings() {
+      if (confirm("Are you sure you want to reset all settings?")) {
+        notificationsToggle.checked = false;
+        darkModeToggle.checked = false;
+        document.getElementById('language').selectedIndex = 0;
+        document.getElementById('reminder').value = "";  
+        document.body.classList.remove('dark-mode');
+        alert("Settings reset successfully.");
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recycling Old Things</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to RecycleX!</h1>
+    <p>Recycle responsibly and help the environment!</p>
+    <p>"Turn Your Waste into Wonder! Discover the Art of Recycling and Reusing."</p>
+
+    <!-- Updated button (no inline onclick) -->
+    <button id="get-started-btn">Get Started</button>
+
+    <div class="auth-links">
+      <p>
+        <a href="register.html">New user? Register</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Alarm Sound and Navigation Unlock Script -->
+<script>
+    const alarmSound = new Audio("alarm.mp3");
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("get-started-btn");
+
+      if (btn) {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          // Attempt to play and unlock the alarm sound
+          alarmSound.play().then(() => {
+            // Immediately pause it after unlocking
+            alarmSound.pause();
+            alarmSound.currentTime = 0;
+
+            // Navigate to login page
+            window.location.href = "login.html";
+          }).catch(() => {
+            // If browser blocks autoplay, still proceed
+            window.location.href = "login.html";
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

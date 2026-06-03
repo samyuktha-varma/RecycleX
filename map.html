@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycling Centers</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2 id="category-title">Recycling Centers</h2>
+        <p>Enter your pin code to find nearby centers:</p>
+        <input type="text" id="pincode" placeholder="Enter Pin Code">
+        <button onclick="searchRecyclingCenters()">Find Centers</button>
+        
+        <!-- Result Display -->
+        <p id="searchResult"></p>
+
+         <button onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+                
+    </div>
+
+<script>
+function searchRecyclingCenters() {
+    const zipCode = document.getElementById("pincode").value.trim();
+    const resultElement = document.getElementById("searchResult");
+
+    if (zipCode) {
+        resultElement.innerHTML = `Searching for recycling centers near ${zipCode}...`;
+        
+        setTimeout(() => {
+            resultElement.innerHTML = `
+                ✅ Found 3 recycling centers near ${zipCode}.<br>
+                <a href="https://www.google.com/maps/search/?q=recycling+centers+${zipCode}" target="_blank">
+                    View on Google Maps
+                </a>`;
+        }, 1500);
+    } else {
+        resultElement.innerHTML = "❌ Please enter a valid pin code.";
+    }
+}
+
+
+   </script>
+</body>
+</html>
