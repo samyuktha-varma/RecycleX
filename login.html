@@ -5,9 +5,80 @@
   <title>Login - Recycling Hub</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #e8f5e9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background-color: #ffffff;
+      padding: 50px 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 128, 0, 0.25);
+      width: 550px;
+      max-width: 90%;
+      text-align: center;
+    }
+
+    h2 {
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+
+    form input {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1.1rem;
+      box-sizing: border-box;
+    }
+
+    form button {
+      width: 100%;
+      padding: 14px;
+      background-color: #4caf50;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #388e3c;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .link {
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+
+    .link a {
+      color: #1976d2;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
+  <div class="form-container">
     <h2>Login</h2>
     <form id="login-form">
       <input type="email" id="email" placeholder="Email" required />
@@ -15,9 +86,9 @@
       <button type="submit">Login</button>
     </form>
     <p id="message"></p>
-    <p style="margin-top: 15px; text-align: center;">
+    <div class="link">
       Don't have an account? <a href="register.html">Register here</a>
-    </p>
+    </div>
   </div>
 
   <script>
@@ -27,10 +98,10 @@
       const password = document.getElementById("password").value.trim();
       const message = document.getElementById("message");
 
-      // Fetch users registered in this browser session
+      // 1. Fetch any users registered in this browser session
       const users = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
       
-      // Check credentials against local records or universal tester profile
+      // 2. Check if credentials match a registered user or a default tester account
       const user = users.find(u => u.email === email && u.password === password);
       const isDefaultTester = (email === "test@gmail.com" && password === "test1234");
 
@@ -39,6 +110,7 @@
         message.textContent = "Login successful! Redirecting...";
         localStorage.setItem("loggedInUser", email);
         
+        // Redirect to your dashboard page
         setTimeout(() => { 
           window.location.href = "dashboard.html"; 
         }, 1000);
