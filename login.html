@@ -15,40 +15,36 @@
       <button type="submit">Login</button>
     </form>
     <p id="message"></p>
+    <p style="margin-top: 15px; text-align: center;">
+      Don't have an account? <a href="register.html">Register here</a>
+    </p>
   </div>
 
-  <!-- ✅ Wrap your JS inside script tag -->
   <script>
-    document.getElementById("login-form").addEventListener("submit", async function(e) {
+    document.getElementById("login-form").addEventListener("submit", function(e) {
       e.preventDefault();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
       const message = document.getElementById("message");
 
-      try {
-        const res = await fetch("http://localhost:5000/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ email, password })
-        });
+      // Fetch users registered in this browser session
+      const users = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+      
+      // Check credentials against local records or universal tester profile
+      const user = users.find(u => u.email === email && u.password === password);
+      const isDefaultTester = (email === "test@gmail.com" && password === "test1234");
 
-        const data = await res.json();
-
-        if (res.ok) {
-          message.style.color = "green";
-          message.textContent = "Login successful!";
-          localStorage.setItem("loggedInUser", email);
-          window.location.href = "dashboard.html";
-        } else {
-          message.style.color = "red";
-          message.textContent = data.error || "Login failed.";
-        }
-      } catch (err) {
+      if (user || isDefaultTester) {
+        message.style.color = "green";
+        message.textContent = "Login successful! Redirecting...";
+        localStorage.setItem("loggedInUser", email);
+        
+        setTimeout(() => { 
+          window.location.href = "dashboard.html"; 
+        }, 1000);
+      } else {
         message.style.color = "red";
-        message.textContent = "Server error. Please try again.";
-        console.error("Login error:", err);
+        message.textContent = "Invalid credentials. Please register first!";
       }
     });
   </script>
