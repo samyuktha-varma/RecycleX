@@ -3,7 +3,7 @@
 A full-stack simulation for tracking recycling habits and setting automated alerts.
 
 * **Live Web Demo:** [Click Here to Open Website](https://samyuktha-varma.github.io/RecycleX/)
-* **Backend Source Code:** [View Node.js & Oracle Backend Repository](https://github.com/your-username/RecycleX-Backend)
+* **Backend Source Code:** [View Node.js & Oracle Backend Repository](https://github.com/samyuktha-varma/RecycleX-Backend)
 
 ## Core Technical Features
 * **Frontend:** HTML5, CSS3, JavaScript (Local Authentication fallback for instant web preview).
